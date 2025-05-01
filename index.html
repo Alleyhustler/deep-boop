@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>$DBOOP | Deep Boop AI-Powered Memecoin</title>
+  <style>
+    :root {
+      --bg-color: #0c0c0c;
+      --text-color: #33ff33;
+      --highlight-color: #00cc00;
+      --secondary-color: #cccccc;
+      --terminal-bg: #000000;
+      --prompt-color: #33ff33;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-container {
+      background-color: var(--terminal-bg);
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+      margin: 0 auto;
+      max-width: 800px;
+      overflow-x: auto;
+    }
+    
+    .ascii-logo {
+      white-space: pre;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-block;
+      text-align: left;
+    }
+    
+    .ascii-title {
+      margin-top: 20px;
+      white-space: pre;
+      font-size: 12px;
+      text-align: center;
+    }
+    
+    .terminal {
+      background-color: var(--terminal-bg);
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+      margin: 0 auto;
+      max-width: 800px;
+      height: 400px;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--highlight-color);
+      padding-bottom: 5px;
+    }
+    
+    .terminal-title {
+      font-weight: bold;
+      color: var(--highlight-color);
+    }
+    
+    .terminal-window-buttons {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .window-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .close-btn { background-color: #ff5f56; }
+    .minimize-btn { background-color: #ffbd2e; }
+    .maximize-btn { background-color: #27c93f; }
+    
+    .terminal-content {
+      height: calc(100% - 30px);
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .terminal-line {
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+    
+    .prompt::before {
+      content: "user@deep-boop:~$ ";
+      color: var(--prompt-color);
+    }
+    
+    .command {
+      color: var(--secondary-color);
+    }
+    
+    .response {
+      color: var(--text-color);
+      margin-left: 20px;
+    }
+    
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background-color: var(--text-color);
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    
+    .command-input {
+      background-color: transparent;
+      border: none;
+      color: var(--secondary-color);
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      width: calc(100% - 150px);
+      outline: none;
+    }
+    
+    .input-line {
+      display: flex;
+      align-items: center;
+    }
+    
+    .sections {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-top: 30px;
+      max-width: 800px;
+      margin: 30px auto;
+    }
+    
+    .section {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 5px;
+      padding: 20px;
+      border-left: 3px solid var(--highlight-color);
+    }
+    
+    .section h2 {
+      color: var(--highlight-color);
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    
+    .section p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .section ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .section li {
+      margin-bottom: 5px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: auto;
+      padding: 20px 0;
+      font-size: 12px;
+      color: var(--secondary-color);
+    }
+    
+    @media (max-width: 768px) {
+      .sections {
+        grid-template-columns: 1fr;
+      }
+      
+      .logo-container, .terminal {
+        width: 100%;
+      }
+      
+      .ascii-logo {
+        font-size: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <pre class="ascii-logo">                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                   =----                     =---=                                  
+                                 =-======-                 =-=====--                                
+                                -===========             +===========+                              
+                              ===============           ===============                             
+                             ==+++++++++++++==         ==+++++++++++++==                            
+                            ==+++++++===---------------------==+++++++++=                           
+                           =+++++-----=========================----=+++++=                          
+                          +++=--=====================================--=+++                         
+                         +=-============================================--=+                        
+                        =-=================================================-=                       
+                      =-=====================================================-=                     
+                    ===================++*#################**+==================                    
+                   ===============*################################+=============+                  
+                  ============*#######################################*+===========                 
+                 ==========+#############################################*=========+                
+                +========*#################################################*=========               
+               +===++==+########################################**###########+=======               
+               +=++++++####+==+*=========*##################+========+*===*###*+++++=+              
+               ==+++++#####*==-===+***+====###############*====***+=====-+#####++++++=              
+              +++++++########+--=#######+--+#############*--=*######*--=########+++++=+             
+              ++++++*########---#########---#############=--+########=--*########++++++             
+              ++++++#%%%#####---*#######*---###%#%#######+--+#%######---*###%%###++++++             
+              ++++++#%%%%%%%#*---+#####*---##%%%%%%%%%%%%#---=##%###---+#%%%%%%%%++++++             
+              ++++++#%%%%%%%%%#-:::::::::-####%%%###%%%####=::::::::::*#%%%%%%%%#++++++             
+              ++++++#%%%%%%%%%%%#+:::::+#%#-==*#*===+##===*##*-::::=#%%%%%%%%%%%%++++++             
+              ++++++#%%%%%%%%%%%%%%%%%%%%%%#-------------+%%%%%%%%%%%%%%%%%%%%%%#++++++             
+              +++++++#%%%%%%%%%%%%%%%%%%%%%%%#*+*####+*#%%%%%%%%%%%%%%%%%%%%%%%%++++++              
+               ++++++*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*++++++              
+                +++++++#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#+++++++               
+                 +++++++*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+++++++                
+                  *+++++++*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+++++++*                 
+                   #+++++++++*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+++++++++                   
+                     #++++++++****#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#*+*+*+*+++*                     
+                        *+++++**********###%%%%%%%%%%%%%%%####*+****+*+******                       
+                          ************************************************                          
+                               ***************************************                              
+                                    *****************************                                   
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    </pre>
+      <div class="ascii-title">
+ _____                      ____                    
+|  __ \                    |  _ \                   
+| |  | | ___  ___ _ __     | |_) | ___   ___  _ __  
+| |  | |/ _ \/ _ \ '_ \    |  _ < / _ \ / _ \| '_ \ 
+| |__| |  __/  __/ |_) |   | |_) | (_) | (_) | |_) |
+|_____/ \___|\___| .__/    |____/ \___/ \___/| .__/ 
+                 | |                         | |    
+                 |_|                         |_|    
+      </div>
+    </div>
+  </header>
+
+  <div class="terminal">
+    <div class="terminal-header">
+      <span class="terminal-title">DeepBoop Terminal v1.0.0</span>
+      <div class="terminal-window-buttons">
+        <span class="window-button minimize-btn"></span>
+        <span class="window-button maximize-btn"></span>
+        <span class="window-button close-btn"></span>
+      </div>
+    </div>
+    <div class="terminal-content">
+      <div class="terminal-line">
+        <span class="response">Welcome to Deep Boop Terminal. Type 'help' to see available commands.</span>
+      </div>
+      <div class="terminal-line">
+        <div class="prompt">
+          <span class="command">help</span>
+        </div>
+        <div class="response">
+          Available commands:<br>
+          - about: Learn about Deep Boop<br>
+          - features: Display key features<br>
+          - tokenomics: View token distribution details<br>
+          - roadmap: View project development timeline<br>
+          - team: Meet the team behind Deep Boop<br>
+          - wallet: Display wallet information<br>
+          - social: Display social media links<br>
+          - clear: Clear terminal screen
+        </div>
+      </div>
+      <div id="terminal-lines">
+        <!-- New terminal lines will be added here -->
+      </div>
+      <div class="input-line">
+        <div class="prompt"></div>
+        <input type="text" class="command-input" autofocus>
+        <span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sections">
+    <div class="section">
+      <h2>> About Deep Boop</h2>
+      <p>Deep Boop is a next-generation AI-powered memecoin built on advanced blockchain technology. Unlike traditional memecoins, Deep Boop integrates cutting-edge artificial intelligence to create a truly intelligent financial ecosystem.</p>
+      <p>Founded in 2025, Deep Boop combines the viral nature of meme culture with practical technology applications, creating a unique value proposition in the cryptocurrency market.</p>
+    </div>
+
+    <div class="section">
+      <h2>> Deep Technology</h2>
+      <p>Deep Boop leverages neural networks and machine learning algorithms to analyze market trends, optimize transaction efficiency, and predict potential growth opportunities.</p>
+      <p>Our proprietary AI engine, codenamed "BoopBrain," continuously evolves through decentralized learning, becoming more efficient with each transaction processed in the network.</p>
+    </div>
+
+    <div class="section">
+      <h2>> Community Governance</h2>
+      <p>Deep Boop implements a decentralized autonomous organization (DAO) structure, giving token holders voting rights on protocol upgrades, treasury allocations, and strategic partnerships.</p>
+      <p>Each $DBOOP token represents both a financial stake in the ecosystem and a voice in its development, fostering a truly community-driven project.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="social-links" style="margin-bottom: 15px;">
+      <a href="https://x.com/DeepboopAI" target="_blank" style="color: #1DA1F2; margin: 0 10px; text-decoration: none; font-weight: bold;">Twitter</a> | 
+      <a href="https://t.me/deepboop" target="_blank" style="color: #0088cc; margin: 0 10px; text-decoration: none; font-weight: bold;">Telegram</a> | 
+      <a href="https://pump.fun/profile/4N1f1heLG8H2fzNG1rcXb8ms7AMjUSDvnZFoYy5H8hxf" target="_blank" style="color: #0088cc; margin: 0 10px; text-decoration: none; font-weight: bold;">$DOOP</a> | 
+    </div>
+    <p>© 2025 Deep Boop. All rights reserved. | Privacy Policy | Terms of Service</p>
+    <p>Not financial advice. DYOR. Blockchain technology and cryptocurrencies involve risk.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const commandInput = document.querySelector('.command-input');
+      const terminalLines = document.getElementById('terminal-lines');
+      
+      commandInput.focus();
+      
+      window.addEventListener('click', function() {
+        commandInput.focus();
+      });
+      
+      const commandResponses = {
+        'about': `Deep Boop is a revolutionary AI-powered memecoin built on next-generation blockchain technology.
+Unlike traditional memecoins, Deep Boop integrates artificial intelligence capabilities to create
+a self-learning and adaptive financial ecosystem. Our mission is to merge the virality of meme
+culture with practical technological advancements.`,
+        
+        'features': `Key Features of Deep Boop:
+- AI-Powered Trading Analysis
+- Decentralized Autonomous Organization (DAO)
+- Neural Network Transaction Optimization
+- Predictive Market Analytics
+- Self-Adapting Protocol
+- Zero-Knowledge Security Implementation
+- Cross-Chain Compatibility`,
+        
+        'tokenomics': `Deep Boop ($DBOOP) Tokenomics:
+- Total Supply: 1,000,000,000 $DBOOP
+- Initial Circulating Supply: 400,000,000 $DBOOP
+- Distribution:
+  * 40% - Community & Public Distribution
+  * 20% - Development Fund (vested over 3 years)
+  * 15% - Strategic Partnerships & Exchanges
+  * 15% - Marketing & Ecosystem Growth
+  * 10% - Team Allocation (vested over 4 years)`,
+        
+        'roadmap': `Deep Boop Development Roadmap:
+Q1 2025: 
+- Token Launch
+- Community Building
+- Initial Exchange Listings
+
+Q2 2025:
+- BoopBrain AI Analytics Platform Launch
+- Decentralized Exchange Integration
+- Mobile Wallet Development
+
+Q3 2025:
+- DAO Governance Implementation
+- Cross-Chain Expansion
+- Strategic Partnership Announcements
+
+Q4 2025:
+- Advanced AI Features Release
+- DeFi Protocol Integration
+- Web3 Application Marketplace`,
+        
+        'team': `Deep Boop Core Team:
+- Dr. Alex Chen - AI Research Lead
+- Sarah Rodriguez - Blockchain Development
+- Marcus Wei - Tokenomics & Economics
+- Jenna Park - Community Management
+- Raj Patel - Security & Protocol Design
+
+All team members come from backgrounds in artificial intelligence,
+blockchain technology, and financial systems engineering.`,
+        
+        'wallet': `Connect to Deep Boop:
+Contract Address: 0x9e8F413727dbA545eD0c3A3F8c7E271BC4B0b496
+Symbol: $DBOOP
+Decimals: 18
+Network: Ethereum (ETH)
+
+Support for ERC-20 compatible wallets including:
+- MetaMask
+- Trust Wallet
+- Ledger
+- Trezor`,
+
+        'help': `Available commands:
+- about: Learn about Deep Boop
+- features: Display key features
+- tokenomics: View token distribution details
+- roadmap: View project development timeline
+- team: Meet the team behind Deep Boop
+- wallet: Display wallet information
+- social: Display social media links
+- clear: Clear terminal screen`,
+
+        'clear': 'CLEAR_TERMINAL',
+        
+        'social': `Connect with the $DBOOP community:
+
+Twitter: https://x.com/DeepboopAI
+Telegram: https://t.me/deepboop
+
+Join us and become part of the Deep Boop revolution!`,
+        
+        '': ''
+      };
+      
+      commandInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          const command = commandInput.value.trim().toLowerCase();
+          
+          // Add the command to the terminal
+          const commandLineDiv = document.createElement('div');
+          commandLineDiv.className = 'terminal-line';
+          commandLineDiv.innerHTML = `<div class="prompt"><span class="command">${command}</span></div>`;
+          terminalLines.appendChild(commandLineDiv);
+          
+          // Process command
+          if (command in commandResponses) {
+            if (commandResponses[command] === 'CLEAR_TERMINAL') {
+              terminalLines.innerHTML = '';
+            } else if (commandResponses[command] !== '') {
+              const responseDiv = document.createElement('div');
+              responseDiv.className = 'terminal-line';
+              responseDiv.innerHTML = `<div class="response">${commandResponses[command].replace(/\n/g, '<br>')}</div>`;
+              terminalLines.appendChild(responseDiv);
+            }
+          } else {
+            const responseDiv = document.createElement('div');
+            responseDiv.className = 'terminal-line';
+            responseDiv.innerHTML = `<div class="response">Command not found: ${command}. Type 'help' to see available commands.</div>`;
+            terminalLines.appendChild(responseDiv);
+          }
+          
+          // Clear input and scroll to bottom
+          commandInput.value = '';
+          terminalLines.scrollTop = terminalLines.scrollHeight;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
